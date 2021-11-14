@@ -1,9 +1,12 @@
 import cv2
+import sys
 import time
 import gpio
 import datetime
 from utils import get_contours
 import glob_vars as gv
+
+cv2.useOptimized()
 
 cap = cv2.VideoCapture(0)
 face_cascade = cv2.CascadeClassifier("frontalface_default.xml")
@@ -31,6 +34,7 @@ def run():
             if detection:
                 timer_started = False
             else:
+                gpio.set_red_led(True)
                 detection = True
                 current_time = datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
                 out = cv2.VideoWriter(f'{current_time}.mp4', fourcc, 20, frame_size)
@@ -42,28 +46,31 @@ def run():
                     timer_started = False
                     out.release()
                     out = None
+                    gpio.set_red_led(False)
             else:
                 timer_started = True
                 detection_stopped_time = time.time()
         if detection:
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            out.write(frame_rgb)
+            out.write(frame)
 
-        cv2.imshow('Camera view', frame)
-        if cv2.waitKey(10) == ord('q'):
-            break
+        if len(sys.argv) == 1:
+            cv2.imshow('Camera view', frame)
+            if cv2.waitKey(10) == ord('q'):
+                cv2.destroyAllWindows()
+                break
         frame_old = frame
-
     cap.release()
 
 
 def main():
     try:
         gpio.init()
-        gpio.set_red_led(True)
+        gpio.set_green_led(True)
         run()
         gpio.cleanup()
     except KeyboardInterrupt:
+        cv2.destroyAllWindows()
+        cap.release()
         gpio.cleanup()
 
 
