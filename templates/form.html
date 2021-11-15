@@ -1,0 +1,13 @@
+<form action="#" method ="post">
+    <label for="faces">DETECT_FACES: </label>
+    <input type="checkbox" id="faces" name="DETECT_FACES"/><br/>
+    <label for="bodies">DETECT_BODIES: </label>
+    <input type="checkbox" id="bodies" name="DETECT_BODIES"/><br/>
+    <label for="contours">DETECT_CONTOURS: </label>
+    <input type="checkbox" id="contours" name="DETECT_CONTOURS"/><br/>
+    <label for="duration">SECONDS_RECORDING_AFTER_DETECTION: </label>
+    <input type="number" id="duration" name="SECONDS_RECORDING_AFTER_DETECTION" min="0" max="10"/><br/>
+    <label for="contour_area">CONTOUR_MIN_AREA: </label>
+    <input type="number" id="contour_area" name="CONTOUR_MIN_AREA" min="0" max="100000"/><br/>
+    <input type="submit" value="Submit" />
+</form>
